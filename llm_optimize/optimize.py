@@ -61,7 +61,11 @@ def run(
             messages.pop(1)
             resp = model(messages).content
         _log(resp, "yellow")
-        x = re.findall("```(?:\w+)?([\s\S]+)```", resp)[0]
+        try:
+            x = re.findall("```(?:\w+)?([\s\S]+)```", resp)[0]
+        except KeyError as e:
+            _log(f"Stopping early, failed to parse response. {e}", "red")
+            break
         _log(x, "blue")
         score, fx = func(x)
         score_hist.append(score)

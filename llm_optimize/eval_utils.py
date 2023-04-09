@@ -1,7 +1,8 @@
 from typing import Dict, List, Callable, Optional
+import subprocess
 import time
+import tempfile
 import multiprocessing
-import re
 
 from llm_optimize import llm, optimize
 
@@ -21,8 +22,6 @@ def _exec_return_locals(script: str, return_dict: Dict, local_vars: Dict, return
 def exec_with_timeout_unsafe(script: str, local_vars: Dict, return_local_vars: List[str], timeout_secs: int) -> Dict:
     """
     Run `exec(script)` with some fancy features and data passing
-
-    TODO: Sandbox this
     """
     vars = multiprocessing.Manager().dict()
     proc = multiprocessing.Process(target=_exec_return_locals, args=(script, vars, local_vars, return_local_vars))
@@ -41,6 +40,15 @@ def exec_with_timeout_unsafe(script: str, local_vars: Dict, return_local_vars: L
 
 def exec_unsafe(script: str, globals_dict: Dict, locals_dict: Dict):
     exec(script, globals_dict, locals_dict)
+
+
+def exec_temp_script_unsafe(script: str, timeout: int):
+    with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".py") as tmpf:
+        tmpf.write(script)
+    try:
+        subprocess.check_output(["python", tmpf.name], stderr=subprocess.STDOUT, timeout=timeout)
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(e.output.decode("utf-8"))
 
 
 def get_llm_scorer(

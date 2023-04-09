@@ -82,5 +82,5 @@ def train_model(script):
 
 
 if __name__ == "__main__":
-    best_code = optimize.run(TASK, QUESTION, train_model, x0=x0, stop_score=1.0, max_steps=3)
+    best_code = optimize.run(TASK, QUESTION, train_model, x0=x0, stop_score=1.0, max_steps=10)
     print(best_code)
