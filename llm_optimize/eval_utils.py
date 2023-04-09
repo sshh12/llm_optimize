@@ -15,7 +15,7 @@ def _exec_return_locals(script: str, return_dict: Dict, local_vars: Dict, return
         return_dict[var] = locals()[var]
 
 
-def exec_with_timeout(script: str, local_vars: Dict, return_local_vars: List[str], timeout_secs: int) -> Dict:
+def exec_with_timeout_unsafe(script: str, local_vars: Dict, return_local_vars: List[str], timeout_secs: int) -> Dict:
     """
     Run `exec(script)` with some fancy features and data passing
 
@@ -34,3 +34,7 @@ def exec_with_timeout(script: str, local_vars: Dict, return_local_vars: List[str
     if _EXCEPTION in vars:
         raise vars["_EXCEPTION"]
     return dict(vars)
+
+
+def exec_unsafe(script: str, globals: Dict, locals: Dict):
+    exec(script, globals, locals)

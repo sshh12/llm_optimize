@@ -1,6 +1,7 @@
-from typing import Callable, Optional, Tuple
+from typing import Callable, Optional, Tuple, List
 import re
 
+import openai
 from langchain.input import print_text
 from langchain.prompts.chat import (
     SystemMessage,
@@ -12,6 +13,9 @@ from llm_optimize import llm, constants
 
 # The numeric score and the LLM-facing representation
 ScoreTuple = Tuple[float, str]
+
+# Best score, history of scores, best x0
+OptimizationResultTuple = Tuple[float, List[float], str]
 
 
 def run(
@@ -25,7 +29,7 @@ def run(
     system_prompt: Optional[str] = constants.SYSTEM_PROMPT,
     human_prompt: Optional[str] = constants.HUMAN_OPTIMIZATION_PROMPT,
     stop_score: Optional[float] = None,
-) -> ScoreTuple:
+) -> OptimizationResultTuple:
     if model is None:
         model = llm.get_default_llm()
 
@@ -45,13 +49,22 @@ def run(
         SystemMessage(content=system_prompt.format(task_description=task_description)),
         HumanMessage(content=human_prompt.format(task_question=task_question, x=x, fx=fx)),
     ]
+    score_hist = []
 
     for _ in range(max_steps):
-        resp = model(messages).content
+        try:
+            resp = model(messages).content
+        except openai.error.InvalidRequestError as e:
+            _log(str(e), "red")
+            # drop the first set of results to reduce token usage
+            messages.pop(1)
+            messages.pop(1)
+            resp = model(messages).content
         _log(resp, "yellow")
         x = re.findall("```(?:\w+)?([\s\S]+)```", resp)[0]
         _log(x, "blue")
         score, fx = func(x)
+        score_hist.append(score)
         if score > best_score:
             best_x = x
             best_score = score
@@ -61,4 +74,4 @@ def run(
         if stop_score is not None and best_score >= stop_score:
             break
 
-    return (best_score, best_x)
+    return (best_score, score_hist, best_x)
