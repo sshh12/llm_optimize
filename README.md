@@ -10,7 +10,7 @@ _Blue represents the "x", green the "f(x)", and yellow the LLM optimization step
 
 #### Traditional Optimization
 
-There's a ton of different ways libraries do blackbox optimization. It mainly comes down to definiting a function that takes a set of float params and converts them into a score, some bounds/constraints, and then an algorthm strategically varies the params to maximize (or minimize) the value outputted by the function. It's refered to as "blackbox" optimization because the function `f()` can be any arbitrary function (although ideally continuous and convox).
+There's a ton of different ways libraries do blackbox optimization. It mainly comes down to defining a function that takes a set of float params and converts them into a score, some bounds/constraints, and then an algorthm strategically varies the params to maximize (or minimize) the value outputted by the function. It's referred to as "blackbox" optimization because the function `f()` can be any arbitrary function (although ideally continuous and/or convox).
 
 Here's an example with [`black-box`](https://pypi.org/project/black-box/):
 
@@ -42,7 +42,7 @@ The example above could be written something like this:
 x0 = "[0, 0]"
 
 task = "Decrease the value of f(x). The values of x must be [-10, 10]."
-question = "What is the next x to try such that f(x) is smaller"
+question = "What is the next x to try such that f(x) is smaller?"
 
 def f(x):
    x_array = parse(x)
@@ -307,10 +307,20 @@ See the examples for basic usage.
 1. `pip install git+https://github.com/sshh12/llm_optimize`
 2. Set the environment variable `OPENAI_API_KEY`
 
-### Change Default Model
+### Change Model
 
 ```python
 from llm_optimize import llm
 
 llm.default_llm_options.update(model_name="gpt-4")
 ```
+
+## Notes
+
+### Future Work
+
+- Using sandboxed environments for evaluating generated code in a safe space
+- Let the llm have access to tools/plugins (e.g. for AutoML a dataset analysis tool)
+- Optimizing the chat-as-optimization prompt to run ideas parallel or mix numerical methods with this for better performance
+- Fixed x->(fx) context window to save on token costs, currently the entire optimization history is sent
+- Mid-optimization human-in-the-loop guidance to help converge
