@@ -36,5 +36,5 @@ def exec_with_timeout_unsafe(script: str, local_vars: Dict, return_local_vars: L
     return dict(vars)
 
 
-def exec_unsafe(script: str, globals: Dict, locals: Dict):
-    exec(script, globals, locals)
+def exec_unsafe(script: str, globals_dict: Dict, locals_dict: Dict):
+    exec(script, globals_dict, locals_dict)

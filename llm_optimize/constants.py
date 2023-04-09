@@ -33,5 +33,5 @@ f(x) =
 
 Reply briefly with what might be needed to improve, why what you tried didn't work, and then the full more optimal value of x quoted with ```. 
 
-Do not use backticks for any other content, so they should only be used twice!
+Do not use backticks for any other content, so there should only be used twice!
 """
