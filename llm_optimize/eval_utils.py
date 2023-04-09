@@ -1,6 +1,9 @@
-from typing import Dict, List
+from typing import Dict, List, Callable, Optional
 import time
 import multiprocessing
+import re
+
+from llm_optimize import llm, optimize
 
 _EXCEPTION = "_EXCEPTION"
 
@@ -38,3 +41,23 @@ def exec_with_timeout_unsafe(script: str, local_vars: Dict, return_local_vars: L
 
 def exec_unsafe(script: str, globals_dict: Dict, locals_dict: Dict):
     exec(script, globals_dict, locals_dict)
+
+
+def get_llm_scorer(
+    prompt: str,
+    parse_score: Callable[[str], float],
+    model: Optional[llm.LLMModel] = None,
+    error_score: Optional[float] = 0.0,
+) -> Callable[[str], optimize.ScoreTuple]:
+    if model is None:
+        model = llm.get_default_llm()
+
+    def scorer(x: str) -> optimize.ScoreTuple:
+        result = model.call_as_llm(prompt.format(x=x))
+        try:
+            score = parse_score(result)
+        except Exception as e:
+            return (error_score, str(e))
+        return (score, result)
+
+    return scorer

@@ -49,5 +49,5 @@ def run_code(script):
 
 
 if __name__ == "__main__":
-    best_code = optimize.run(TASK, QUESTION, run_code, x0=x0, stop_score=10.0, max_steps=10)
+    best_code = optimize.run(TASK, QUESTION, run_code, x0=x0, stop_score=10.0, max_steps=3)
     print(best_code)
