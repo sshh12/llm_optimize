@@ -327,6 +327,8 @@ llm.default_llm_options.update(model_name="gpt-4")
 
 - Using sandboxed environments for evaluating generated code in a safe space
 - Let the llm have access to tools/plugins (e.g. for AutoML a dataset analysis tool)
-- Optimizing the chat-as-optimization prompt to run ideas parallel or mix with numerical methods with this for better performance
+- Optimizing the chat-as-optimization prompt to run ideas parallel
+- Mix with numerical methods for better performance (speed and efficacy)
 - Fixed x->(fx) context window to save on token costs, currently the entire optimization history is sent
 - Mid-optimization human-in-the-loop guidance to help converge
+- Do you even need x0?
