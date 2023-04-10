@@ -53,5 +53,5 @@ def run_factory(script):
 
 
 if __name__ == "__main__":
-    best_code = optimize.run(TASK, QUESTION, run_factory, x0=x0, stop_score=1e9, max_steps=10)
+    best_code = optimize.run(TASK, QUESTION, run_factory, x0=x0, stop_score=1e9, max_steps=3)
     print(best_code)

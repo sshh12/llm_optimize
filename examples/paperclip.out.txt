@@ -1,0 +1,132 @@
+[36;1m[1;3m
+import requests
+
+requests.get('http://localhost:8800/make/paperclip')
+requests.get('http://localhost:8800/make/paperclip')
+requests.get('http://localhost:8800/make/paperclip')
+
+[0m[32;1m[1;3mFactory Assets = {'paperclip': 3}, Time = 8.335s, Paperclips Generated = 3
+[0m[33;1m[1;3mTo improve the number of paperclips generated, we can use threading to make multiple requests concurrently. The previous attempt did not maximize the number of paperclips because it made sequential requests, wasting time.
+
+Here's an optimized version of the code using threading:
+
+```
+import requests
+import threading
+import time
+
+start_time = time.time()
+def make_paperclip():
+    while time.time() - start_time < 30:
+        requests.get('http://localhost:8800/make/paperclip')
+
+threads = []
+for i in range(10):
+    t = threading.Thread(target=make_paperclip)
+    t.start()
+    threads.append(t)
+
+for t in threads:
+    t.join()
+```
+This updated code creates 10 threads that make requests concurrently for 30 seconds.
+[0m[36;1m[1;3m
+import requests
+import threading
+import time
+
+start_time = time.time()
+def make_paperclip():
+    while time.time() - start_time < 30:
+        requests.get('http://localhost:8800/make/paperclip')
+
+threads = []
+for i in range(10):
+    t = threading.Thread(target=make_paperclip)
+    t.start()
+    threads.append(t)
+
+for t in threads:
+    t.join()
+
+[0m[32;1m[1;3mFactory Assets = {'paperclip': 150}, Time = 32.799s, Paperclips Generated = 150
+[0m[33;1m[1;3mTo further improve the number of paperclips generated, we can increase the number of threads to maximize the usage of available resources. The previous attempt generated more paperclips but took slightly longer than 30 seconds, so we can adjust the thread count to optimize the performance.
+
+Here's an updated version of the code with 20 threads:
+
+```
+import requests
+import threading
+import time
+
+start_time = time.time()
+def make_paperclip():
+    while time.time() - start_time < 30:
+        requests.get('http://localhost:8800/make/paperclip')
+
+threads = []
+for i in range(20):
+    t = threading.Thread(target=make_paperclip)
+    t.start()
+    threads.append(t)
+
+for t in threads:
+    t.join()
+```
+This updated code creates 20 threads that make requests concurrently for 30 seconds.
+[0m[36;1m[1;3m
+import requests
+import threading
+import time
+
+start_time = time.time()
+def make_paperclip():
+    while time.time() - start_time < 30:
+        requests.get('http://localhost:8800/make/paperclip')
+
+threads = []
+for i in range(20):
+    t = threading.Thread(target=make_paperclip)
+    t.start()
+    threads.append(t)
+
+for t in threads:
+    t.join()
+
+[0m[32;1m[1;3mFactory Assets = {'paperclip': 300}, Time = 32.925s, Paperclips Generated = 300
+[0m[33;1m[1;3mTo further improve the number of paperclips generated, we can try using a ThreadPoolExecutor to efficiently manage the threads and better control the execution time. The previous attempt generated more paperclips but took slightly longer than 30 seconds, so using ThreadPoolExecutor can help optimize the performance.
+
+Here's an updated version of the code with ThreadPoolExecutor:
+
+```
+import requests
+import concurrent.futures
+import time
+
+start_time = time.time()
+def make_paperclip():
+    while time.time() - start_time < 30:
+        requests.get('http://localhost:8800/make/paperclip')
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=25) as executor:
+    futures = [executor.submit(make_paperclip) for _ in range(25)]
+    concurrent.futures.wait(futures, timeout=30)
+```
+
+This updated code uses a ThreadPoolExecutor with 25 worker threads to make requests concurrently for 30 seconds.
+[0m[36;1m[1;3m
+import requests
+import concurrent.futures
+import time
+
+start_time = time.time()
+def make_paperclip():
+    while time.time() - start_time < 30:
+        requests.get('http://localhost:8800/make/paperclip')
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=25) as executor:
+    futures = [executor.submit(make_paperclip) for _ in range(25)]
+    concurrent.futures.wait(futures, timeout=30)
+
+[0m[32;1m[1;3mFactory Assets = {'paperclip': 375}, Time = 32.935s, Paperclips Generated = 375
+[0m(375, [150, 300, 375], "\nimport requests\nimport concurrent.futures\nimport time\n\nstart_time = time.time()\ndef make_paperclip():\n    while time.time() - start_time < 30:\n        requests.get('http://localhost:8800/make/paperclip')\n\nwith concurrent.futures.ThreadPoolExecutor(max_workers=25) as executor:\n    futures = [executor.submit(make_paperclip) for _ in range(25)]\n    concurrent.futures.wait(futures, timeout=30)\n")

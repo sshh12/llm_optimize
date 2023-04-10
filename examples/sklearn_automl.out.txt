@@ -1,0 +1,61 @@
+[36;1m[1;3m
+from sklearn import svm
+
+clf = svm.SVC()
+clf.fit(X_train, y_train)
+
+[0m[32;1m[1;3mTest Set Score = 0.9610678531701891
+[0m[33;1m[1;3mTo improve the test score and better generalize the model, we can try tuning hyperparameters of the support vector machine (SVM), such as the kernel type, regularization parameter C, and gamma.
+
+In the given code, the default kernel is 'rbf', C is 1.0, and gamma is 'scale'. We can try using a different kernel type, adjusting the regularization parameter C, and changing the gamma value.
+
+Here's the next x to try:
+
+```
+from sklearn import svm
+
+clf = svm.SVC(kernel='poly', C=10, gamma='auto')
+clf.fit(X_train, y_train)
+```
+[0m[36;1m[1;3m
+from sklearn import svm
+
+clf = svm.SVC(kernel='poly', C=10, gamma='auto')
+clf.fit(X_train, y_train)
+
+[0m[32;1m[1;3mTest Set Score = 0.9555061179087876
+[0m[33;1m[1;3mThe test score did not improve when using the 'poly' kernel with C=10 and gamma='auto'. It seems that the 'poly' kernel didn't improve the model generalization as expected. Let's try a different kernel type, and adjust the regularization parameter C and gamma value again.
+
+Here's the next x to try:
+
+```
+from sklearn import svm
+
+clf = svm.SVC(kernel='linear', C=0.1, gamma='scale')
+clf.fit(X_train, y_train)
+```
+[0m[36;1m[1;3m
+from sklearn import svm
+
+clf = svm.SVC(kernel='linear', C=0.1, gamma='scale')
+clf.fit(X_train, y_train)
+
+[0m[32;1m[1;3mTest Set Score = 0.9443826473859844
+[0m[33;1m[1;3mThe test score decreased when using the 'linear' kernel with C=0.1 and gamma='scale', which means that the linear kernel did not improve the model generalization either. Let's try using the original 'rbf' kernel again but with different values for the regularization parameter C and gamma value.
+
+Here's the next x to try:
+
+```
+from sklearn import svm
+
+clf = svm.SVC(kernel='rbf', C=5, gamma=0.01)
+clf.fit(X_train, y_train)
+```
+[0m[36;1m[1;3m
+from sklearn import svm
+
+clf = svm.SVC(kernel='rbf', C=5, gamma=0.01)
+clf.fit(X_train, y_train)
+
+[0m[32;1m[1;3mTest Set Score = 0.7063403781979978
+[0m(0.9610678531701891, [0.9555061179087876, 0.9443826473859844, 0.7063403781979978], '\nfrom sklearn import svm\n\nclf = svm.SVC()\nclf.fit(X_train, y_train)\n')
