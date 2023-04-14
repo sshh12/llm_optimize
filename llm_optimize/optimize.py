@@ -49,7 +49,7 @@ def run(
         SystemMessage(content=system_prompt.format(task_description=task_description)),
         HumanMessage(content=human_prompt.format(task_question=task_question, x=x, fx=fx)),
     ]
-    score_hist = []
+    score_hist = [score]
 
     for _ in range(max_steps):
         try:
@@ -63,7 +63,7 @@ def run(
         _log(resp, "yellow")
         try:
             x = re.findall("```(?:\w+)?([\s\S]+)```", resp)[0]
-        except KeyError as e:
+        except IndexError as e:
             _log(f"Stopping early, failed to parse response. {e}", "red")
             break
         _log(x, "blue")
